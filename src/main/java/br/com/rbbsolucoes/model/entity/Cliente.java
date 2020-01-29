@@ -13,7 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "CLIENTE", schema = "cormecial")
+@Table(name = "CLIENTES")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,6 +30,8 @@ public class Cliente {
 	
 	@Column(name = "CPF")
 	private String cpf;
-	
 
+	public Long getId() {
+		return id;
+	}
 }

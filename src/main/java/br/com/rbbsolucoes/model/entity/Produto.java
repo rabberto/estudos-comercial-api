@@ -28,7 +28,7 @@ public class Produto {
 	private Long id;
 	
 	@Column(name = "NCM")
-	private String Ncm;
+	private String ncm;
 	
 	@Column(name = "DESCRICAO")
 	private String name;
