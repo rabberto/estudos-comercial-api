@@ -9,7 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.rbbsolucoes.api.dto.GrupoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +31,7 @@ public class Produto {
 	private String ncm;
 	
 	@Column(name = "DESCRICAO")
-	private String nome;
+	private String descricao;
 	
 	@ManyToOne
 	@JoinColumn(name = "CODIGO_GRUPO")

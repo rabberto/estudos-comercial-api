@@ -16,14 +16,14 @@ import br.com.rbbsolucoes.model.repository.ProdutoRepository;
 import br.com.rbbsolucoes.service.ProdutoService;
 
 @Service
-public class ProdutoServiceImpl implements ProdutoService {
-
+public class ProdutoServiceImp implements ProdutoService {
+	
 	private ProdutoRepository repository;
 	
-	public ProdutoServiceImpl(ProdutoRepository repository) {
+	public ProdutoServiceImp(ProdutoRepository repository) {
 		this.repository = repository;
 	}
-	
+
 	@Override
 	@Transactional
 	public Produto salvar(Produto produto) {
@@ -38,40 +38,36 @@ public class ProdutoServiceImpl implements ProdutoService {
 		validar(produto);
 		return repository.save(produto);
 	}
-	
+
 	@Override
 	@Transactional
 	public void deletar(Produto produto) {
 		Objects.requireNonNull(produto.getId());
-		repository.delete(produto);
+		repository.delete(produto);		
+	}
+
+	@Override
+	public List<Produto> buscar(Produto produtoFiltro) {
+		Example example = Example.of(produtoFiltro, ExampleMatcher.matching().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING));  
+		return repository.findAll(example);
 	}
 
 	@Override
 	public void validar(Produto produto) {
-		if(produto.getNome() == null || produto.getNome().trim().equals("")){
-			throw new RegraNegocioException("Informe o Nome do Produto");
+		if(produto.getDescricao() == null || produto.getDescricao().trim().equals("")) {
+			throw new RegraNegocioException("Descrição do Produto é obrigatória.");
 		}
 		if(produto.getNcm() == null || produto.getNcm().trim().equals("")) {
-			throw new RegraNegocioException("Informe o NCM do Produto");
+			throw new RegraNegocioException("NCM do Produto é obrigatória.");
 		}
-		if(produto.getGrupo() == null || produto.getGrupo().equals(0)) {
-			throw new RegraNegocioException("Informe o Grupo do Produto");
-		}
+		if(produto.getGrupo() == null || produto.getGrupo().getId() == null) {
+			throw new RegraNegocioException("NCM do Produto é obrigatória.");
+		}		
 	}
 
 	@Override
 	public Optional<Produto> getById(Long id) {
 		return repository.findById(id);
 	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public List<Produto> buscar(Produto produtoFiltro) {
-		Example example = Example.of(produtoFiltro, 
-				ExampleMatcher.matching()
-				.withIgnoreCase()
-				.withStringMatcher(StringMatcher.CONTAINING));
-		return repository.findAll(example);
-	}
-
+	
 }

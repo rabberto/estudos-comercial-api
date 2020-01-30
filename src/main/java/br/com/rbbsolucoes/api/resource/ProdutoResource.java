@@ -28,17 +28,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProdutoResource {
 	
-	private ProdutoService service;
-	private GrupoService grupoService;
-
+	private final ProdutoService service;
+	private final GrupoService grupoService;
+	
 	@PostMapping
 	public ResponseEntity salvar(@RequestBody ProdutoDTO dto) {
 		try {
 			Produto entity = converter(dto);
 			entity = service.salvar(entity);
 			return new ResponseEntity(entity, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+		} catch (RegraNegocioException e) {
+		return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 	
@@ -53,49 +53,50 @@ public class ProdutoResource {
 			} catch (RegraNegocioException e) {
 				return ResponseEntity.badRequest().body(e.getMessage());
 			}
-		}).orElseGet(() -> new ResponseEntity("Produto não encontrado para o Id informado", HttpStatus.BAD_REQUEST));
+			
+		}).orElseGet(() -> new ResponseEntity("Produto não encontrado para o Id informado.", HttpStatus.BAD_REQUEST));
 	}
-		
+	
 	@DeleteMapping("{id}")
-	public ResponseEntity deletar(@PathVariable("id") Long id) {
+	private ResponseEntity deletar(@PathVariable("id") Long id) {
 		return service.getById(id).map(entity -> {
 			service.deletar(entity);
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
-		}).orElseGet(() -> new ResponseEntity("Prdouto não encontrado para o Id informado", HttpStatus.BAD_REQUEST));
+		}).orElseGet(() -> new ResponseEntity<>("Produto não encontrado para o Id informado.", HttpStatus.BAD_REQUEST));
 	}
 	
 	@GetMapping
 	public ResponseEntity buscar(
-			@RequestParam( value = "nome", required = false) String nome,
-			@RequestParam( value = "grupo", required = false) Long idGrupo,
-			@RequestParam( value = "ncm", required = false) String ncm) {
+			@RequestParam(value = "descricao", required = false) String descricao,
+			@RequestParam(value = "ncm", required = false) String ncm,
+			@RequestParam(value = "grupo", required = false) Long idGrupo) {
 		
 		Produto produtoFiltro = new Produto();
-		
-		if(!(idGrupo == null || idGrupo.equals(0))) {
-			Optional<Grupo> grupo = grupoService.getById(idGrupo);
-			if(!grupo.isPresent()) {
-				return ResponseEntity.badRequest().body("Não foi possível realizar a consulta. Id do grupo informado não esta cadastrado.");
-			}else {
-				produtoFiltro.setGrupo(grupo.get());
-			}		
-		}			
+		produtoFiltro.setDescricao(descricao);
 		produtoFiltro.setNcm(ncm);
-		produtoFiltro.setNome(nome);
+		
+		if(!idGrupo.equals(0)) {			
+			Optional<Grupo> grupo = grupoService.getById(idGrupo);
+			if(grupo.isPresent()) {
+				produtoFiltro.setGrupo(grupo.get());
+			}			
+		}
 		
 		List<Produto> produtos = service.buscar(produtoFiltro);
 		return ResponseEntity.ok(produtos);
+		
 	}
 	
 	private Produto converter(ProdutoDTO dto) {
-		Grupo grupo = grupoService.getById(dto.getGrupo())
-				.orElseThrow(() -> new RegraNegocioException("Grupo não encontrado para o Id informado"));
+		
+		Grupo grupo =  grupoService.getById(dto.getGrupo()).orElseThrow(() -> new RegraNegocioException("Grupo não encontrado para o Id informado."));
 		
 		Produto produto = new Produto();
-		produto.setNome(dto.getNome());
-		produto.setNcm(dto.getNcm());		
+		produto.setDescricao(dto.getDescricao());
+		produto.setNcm(dto.getNcm());
 		produto.setGrupo(grupo);
-		
 		return produto;
 	}
+	
+
 }

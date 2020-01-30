@@ -8,8 +8,8 @@ import lombok.Data;
 public class ProdutoDTO {
 
 	private Long id;
-	private String nome;
+	private String descricao;
 	private String ncm;
-	private Long grupo;
+	private Long Grupo;
 	
 }
