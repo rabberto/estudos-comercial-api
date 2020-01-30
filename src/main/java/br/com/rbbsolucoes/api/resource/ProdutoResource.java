@@ -24,13 +24,13 @@ import br.com.rbbsolucoes.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("api/produtos")
+@RequestMapping("/api/produtos")
 @RequiredArgsConstructor
 public class ProdutoResource {
-
-	private final ProdutoService service;
-	private final GrupoService grupoService;
 	
+	private ProdutoService service;
+	private GrupoService grupoService;
+
 	@PostMapping
 	public ResponseEntity salvar(@RequestBody ProdutoDTO dto) {
 		try {
@@ -55,7 +55,7 @@ public class ProdutoResource {
 			}
 		}).orElseGet(() -> new ResponseEntity("Produto não encontrado para o Id informado", HttpStatus.BAD_REQUEST));
 	}
-	
+		
 	@DeleteMapping("{id}")
 	public ResponseEntity deletar(@PathVariable("id") Long id) {
 		return service.getById(id).map(entity -> {

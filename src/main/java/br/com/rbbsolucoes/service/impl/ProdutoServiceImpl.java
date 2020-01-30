@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.rbbsolucoes.exception.RegraNegocioException;
@@ -14,6 +15,7 @@ import br.com.rbbsolucoes.model.entity.Produto;
 import br.com.rbbsolucoes.model.repository.ProdutoRepository;
 import br.com.rbbsolucoes.service.ProdutoService;
 
+@Service
 public class ProdutoServiceImpl implements ProdutoService {
 
 	private ProdutoRepository repository;
