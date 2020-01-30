@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AtualizaNomeClienteDTO {
+public class ClienteAtualizaNomeDTO {
 	
 	private String nome;
 

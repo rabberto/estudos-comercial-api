@@ -45,19 +45,8 @@ public class ClienteRepositoryTest {
 		
 	}
 	
-	public void deveRetornarFalseQuandoCpfJaCadastrado() {
-		//cenario
-		Cliente cliente = criarCliente();
-		entityManager.persist(cliente);
-		
-		//acao/execucao
-		boolean result = repository.existsByCpf("31829869884");
-		
-		//verificacao
-		Assertions.assertThat(result).isFalse();
-		
-	}
 	
+	@Test
 	public void devePersistirClienteNaBaseDados() {
 		//cenario
 		Cliente cliente = criarCliente();
@@ -69,6 +58,7 @@ public class ClienteRepositoryTest {
 		Assertions.assertThat(clienteSalvo.getId()).isNotNull();
 	}
 	
+	@Test
 	public void deveBuscarClientePorCpf() {
 		//cenario
 		Cliente cliente = criarCliente();
@@ -80,6 +70,7 @@ public class ClienteRepositoryTest {
 		Assertions.assertThat(result.isPresent()).isTrue();
 	}
 	
+	@Test
 	public void deveRetornarVazioQuandoClientePorCpfNaoEstiverCadastrado() {
 		//cenario
 		Cliente cliente = criarCliente();

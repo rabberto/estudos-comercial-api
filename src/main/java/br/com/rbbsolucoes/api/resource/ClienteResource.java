@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.rbbsolucoes.api.dto.AtualizaNomeClienteDTO;
+import br.com.rbbsolucoes.api.dto.ClienteAtualizaNomeDTO;
 import br.com.rbbsolucoes.api.dto.ClienteDTO;
 import br.com.rbbsolucoes.exception.RegraNegocioException;
 import br.com.rbbsolucoes.model.entity.Cliente;
@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("api/clientes")
 @RequiredArgsConstructor
-public class ClieneResource {
+public class ClienteResource {
 	
 	private final ClienteService service;
 	
@@ -36,8 +36,8 @@ public class ClieneResource {
 		Cliente cliente = Cliente.builder().nome(dto.getNome()).cpf(dto.getCpf()).build();
 		
 		try {
-			Cliente ClienteSalvo = service.salvar(cliente);
-			return new ResponseEntity(ClienteSalvo, HttpStatus.CREATED);
+			Cliente clienteSalvo = service.salvar(cliente);
+			return new ResponseEntity(clienteSalvo, HttpStatus.CREATED);
 		}catch (RegraNegocioException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -45,10 +45,10 @@ public class ClieneResource {
 	}
 	
 	@PutMapping("{id}/atualiza-nome")
-	public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody AtualizaNomeClienteDTO dto) {
+	public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody ClienteAtualizaNomeDTO dto) {
 		return service.getById(id).map( entity -> {
 			String nomeRecebido = dto.getNome();
-			if(nomeRecebido == null || nomeRecebido.trim() == "") {
+			if(nomeRecebido == null || nomeRecebido.trim().equals("")) {
 				return ResponseEntity.badRequest().body("É necessário informar o nome");
 			}
 			try {
@@ -66,7 +66,7 @@ public class ClieneResource {
 	public ResponseEntity deletar(@PathVariable("id") Long id) {
 		return service.getById(id).map(entity -> {
 			service.deletar(entity);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}).orElseGet(() -> new ResponseEntity("Cliente não encontrado para o Id informado", HttpStatus.BAD_REQUEST));
 	}
 	
