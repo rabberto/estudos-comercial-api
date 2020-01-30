@@ -63,6 +63,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Produto> buscar(Produto produtoFiltro) {
 		Example example = Example.of(produtoFiltro, 
 				ExampleMatcher.matching()
