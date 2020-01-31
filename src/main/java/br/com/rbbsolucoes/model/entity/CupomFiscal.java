@@ -1,7 +1,7 @@
 package br.com.rbbsolucoes.model.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

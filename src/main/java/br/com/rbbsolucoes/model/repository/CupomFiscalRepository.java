@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.rbbsolucoes.model.entity.CupomFiscal;
 
-public interface CupomFiscalRespository extends JpaRepository<CupomFiscal, Long>{
+public interface CupomFiscalRepository extends JpaRepository<CupomFiscal, Long>{
 
 }

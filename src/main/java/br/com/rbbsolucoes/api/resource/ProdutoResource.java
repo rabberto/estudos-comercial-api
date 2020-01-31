@@ -75,9 +75,11 @@ public class ProdutoResource {
 		produtoFiltro.setDescricao(descricao);
 		produtoFiltro.setNcm(ncm);
 		
-		if(!idGrupo.equals(0)) {			
+		if(idGrupo != null) {			
 			Optional<Grupo> grupo = grupoService.getById(idGrupo);
-			if(grupo.isPresent()) {
+			if(!grupo.isPresent()) {
+				return ResponseEntity.badRequest().body("Id do Grupo informado não cadastrado na Base de Dados.");
+			}else {
 				produtoFiltro.setGrupo(grupo.get());
 			}			
 		}
